@@ -3,7 +3,6 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router/index.js';
-import resource from './resource/index.js';
 import './common/stylus/index.styl';
 
 Vue.config.productionTip = false;
@@ -12,7 +11,6 @@ Vue.config.productionTip = false;
 new Vue({
   el: '#app',
   router,
-  resource,
   components: {App},
   template: '<App/>'
 });
