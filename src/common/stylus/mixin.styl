@@ -17,8 +17,30 @@ border-1px($borderColor)
     width: 100%
     border-bottom: 1px solid $borderColor
     content: ''
-
+// 背景设置
 bg-image($url)
   background-image: url($url+"@2x.png")
   @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
     background-image: url($url+"@3x.png")
+// 根据不同图标的大小设置其参数
+icon-Size($size)
+    if $size == 1
+      width: 12px
+      height: 12px
+      background-size: 12px 12px
+      margin-right: 4px
+    else if $size == 2
+      width: 16px
+      height: 16px
+      background-size: 16px 16px
+      margin-right: 6px
+    else if $size == 3
+      width: 18px
+      height: 18px
+      background-size: 18px 18px
+      margin-right: 8px
+    else
+      width: 24px
+      height: 24px
+      background-size: 24px 24px
+      margin-right: 10px
