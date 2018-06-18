@@ -17,7 +17,6 @@
         <div class="supports" v-if="seller.supports">
           <!--根据不同优惠活动显示不同图标和优惠信息-->
           <icon :iconSize="1" :iconType="seller.supports[0].type"></icon>
-          <!--<span class="icon" :class="classMap[seller.supports[0].type]"></span>-->
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
         <div v-if="seller.supports" class="support-count" @click="showDetail">
