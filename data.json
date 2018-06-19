@@ -56,7 +56,7 @@
         {
           "name": "皮蛋瘦肉粥",
           "price": 10,
-          "oldPrice": "",
+          "oldPrice": "24",
           "description": "咸粥",
           "sellCount": 229,
           "rating": 100,
@@ -421,7 +421,7 @@
       ]
     },
     {
-      "name": "冰爽饮品限时特惠",
+      "name": "冰饮限时特惠",
       "type": 1,
       "foods": [
         {

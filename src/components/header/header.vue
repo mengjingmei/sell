@@ -103,7 +103,6 @@
       }
     },
     created() {
-      this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
     },
     // 注册组件
     components: {
@@ -287,7 +286,7 @@
                   text-align: left
                   font-size: 12px
                   font-weight: 200
-                  line-height: 12px
+                  line-height: 14px
           .bulletin
             width: 100%
             margin: 24px 0 28px 0

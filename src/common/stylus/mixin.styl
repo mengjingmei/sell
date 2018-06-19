@@ -24,23 +24,13 @@ bg-image($url)
     background-image: url($url+"@3x.png")
 // 根据不同图标的大小设置其参数
 icon-Size($size)
-    if $size == 1
+    if $size == 1 || $size == 3
       width: 12px
       height: 12px
       background-size: 12px 12px
       margin-right: 4px
-    else if $size == 2
+    else
       width: 16px
       height: 16px
       background-size: 16px 16px
       margin-right: 6px
-    else if $size == 3
-      width: 18px
-      height: 18px
-      background-size: 18px 18px
-      margin-right: 8px
-    else
-      width: 24px
-      height: 24px
-      background-size: 24px 24px
-      margin-right: 10px
