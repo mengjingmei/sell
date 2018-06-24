@@ -26,18 +26,22 @@
                 <div class="price">
                   <span class="now">￥{{food.price}}</span><s class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</s>
                 </div>
+                <cartControl class="cartControl-wrapper" :food="food" @cart-add="_drop"></cartControl>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
+    <shopcart ref="shopcart" :select-foods="selectFoods" :minPrice="seller.minPrice" :deliveryPrice="seller.deliveryPrice"></shopcart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import icon from '../../components/icon/icon.vue';
   import BScroll from 'better-scroll';
+  import shopcart from '../../components/shopcart/shopcart.vue';
+  import cartControl from '../../components/cartControl/cartControl.vue';
 
   const ERR_OK = 0;
   export default {
@@ -81,17 +85,30 @@
           }
         }
         return 0;
+      },
+      selectFoods() {
+        let foods = [];
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food);
+            }
+          });
+        });
+        return foods;
       }
     },
     components: {
-      'icon': icon
+      'icon': icon,
+      'shopcart': shopcart,
+      'cartControl': cartControl
     },
     methods: {
       // 初始化滚动页面
       _initScroll() {
         // 使用better-scroll插件让左侧菜单和右侧食物信息页面滚动
         this.menuScroll = new BScroll(this.$refs.menuWrapper, {click: true});
-        this.foodScroll = new BScroll(this.$refs.foodsWrapper, {probeType: 3});
+        this.foodScroll = new BScroll(this.$refs.foodsWrapper, {probeType: 3, click: true});
         // 使用插件提供的方法实时获取右侧滚动时距离视口的高度
         this.foodScroll.on('scroll', (pos) => {
           this.scrollY = Math.abs(Math.round(pos.y));
@@ -112,6 +129,15 @@
         let foodList = this.$refs.foodsWrapper.querySelectorAll('.food-list-hook');
         let ele = foodList[index];
         this.foodScroll.scrollToElement(ele, 300);
+      },
+      _drop(target) {
+        this.$refs.shopcart.drop(target);
+      }
+    },
+    events: {
+      'cart-add'(target) {
+        console.log('good');
+        this._drop(target);
       }
     }
   };
@@ -180,6 +206,7 @@
           img
             border-radius: 2px
         .content
+          position: relative
           flex: 1
           .name
             margin-top: 2px
@@ -210,5 +237,9 @@
               font-weight: 700
               line-height: 24px
               color: rgb(147, 153, 159)
+          .cartControl-wrapper
+            position: absolute
+            right: 18px
+            bottom: 0px
 
 </style>

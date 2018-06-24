@@ -102,8 +102,6 @@
         this.detailShow = false;
       }
     },
-    created() {
-    },
     // 注册组件
     components: {
       // 也可以直接写star

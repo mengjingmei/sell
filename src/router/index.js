@@ -12,7 +12,7 @@ Vue.use(Router);
 // 定义ajax数据交互插件
 Vue.use(Resource);
 
-export default new Router({
+let router = new Router({
   linkActiveClass: 'active',
   routes: [
     {
@@ -32,3 +32,6 @@ export default new Router({
     }
   ]
 });
+export default router;
+// 将goods默认为展示画面
+router.push('goods');
