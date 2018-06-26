@@ -1,7 +1,7 @@
 <template>
   <div class="shopcart">
     <div class="content">
-      <div class="content-left">
+      <div class="content-left" @click="toggleList">
         <div class="logo-wrapper">
           <div class="logo" :class="{hightLight: totalCount>0}">
             <span class="icon-shopping_cart" :class="{hightLight: totalCount>0}"></span>
@@ -11,21 +11,44 @@
         <div class="price" :class="{hightLight: totalPrice>0}">￥{{totalPrice}}</div>
         <div class="description">配送费{{deliveryPrice}}元</div>
       </div>
-      <div class="content-right">
+      <div class="content-right" @click="pay">
         <div class="pay" :class="{hightLight: totalPrice>=minPrice}">{{payDesc}}</div>
       </div>
-        <div class="ball-container">
-          <transition-group name="drop" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
-            <div class="ball" v-for="(ball,index) in balls" v-show="ball.show" :key="index" transition="drop">
-              <div class="inner inner-hook"></div>
-            </div>
-          </transition-group>
+      <div class="ball-container">
+        <transition-group name="drop" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+          <div class="ball" v-for="(ball,index) in balls" v-show="ball.show" :key="index" transition="drop">
+            <div class="inner inner-hook"></div>
+          </div>
+        </transition-group>
+      </div>
+      <div class="shopcart-list" v-show="listShow()">
+        <div class="list-header">
+          <h1 class="title">购物车</h1>
+          <span class="empty" @click="empty">清空</span>
         </div>
+        <div class="list-content" ref="listContent">
+          <ul v-show="selectFoods.length">
+            <li v-for="(food,index) in selectFoods" :key="index" class="food">
+              <span class="name">{{food.name}}</span>
+              <div class="price">
+                <span>￥{{food.price*food.count}}</span>
+              </div>
+              <div class="cartControl_wrapper">
+                <cartControl :food="food"></cartControl>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="list-mask" v-show="listShow()" @click="hideShow"></div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import BScroll from 'better-scroll';
+  import cartControl from '../../components/cartControl/cartControl.vue';
+
   export default {
     props: {
       selectFoods: {
@@ -52,7 +75,9 @@
           {show: false},
           {show: false}
         ],
-        dropBalls: []
+        dropBalls: [],
+        // 判断购物车列表是否展开变量
+        unfold: false
       };
     },
     computed: {
@@ -126,13 +151,57 @@
       },
       afterEnter(el) {
         let ball = this.dropBalls.shift();
-        console.log(ball);
         if (ball) {
           ball.show = false;
           el.style.display = 'none';
         }
-        console.log(this.balls);
+      },
+      // 判断购物车列表是否展开
+      toggleList() {
+        // 购物车食品数量为0
+        if (!this.totalCount) {
+          this.unfold = false;
+        } else {
+          this.unfold = !(this.unfold);
+        }
+      },
+      listShow() { // 判断是否展开详情页
+        let show = this.unfold;
+        if (show) {
+          // 让购物车页面有滚动效果
+          this.$nextTick(() => {
+            if (!this.scroll) { // 页面滚动
+              this.scroll = new BScroll(this.$refs.listContent, {
+                click: true
+              });
+            } else {
+              this.scroll.refresh();// 刷新
+            }
+          });
+        }
+        return ((this.unfold) && (this.totalCount > 0));
+      },
+      // 清空购物车
+      empty() {
+        this.selectFoods.forEach((food) => {
+          food.count = 0;
+        });
+        this.unfold = false;
+      },
+      // 隐藏购物车
+      hideShow() {
+        this.unfold = false;
+      },
+      // 支付
+      pay() {
+        if (this.totalPrice < this.minPrice) {
+          return 0;
+        }
+        alert('请支付' + this.totalPrice + this.deliveryPrice + '元');
       }
+    },
+    components: {
+      'cartControl': cartControl
     }
   };
 </script>
@@ -150,6 +219,7 @@
       .content-left
         flex: 1
         background: #141d27
+        z-index: 20
         .logo-wrapper
           display: inline-block
           font-size: 0
@@ -220,6 +290,7 @@
       .content-right
         flex: 0 0 105px
         width: 105px
+        z-index: 20
         .pay
           height: 48px
           line-height: 48px
@@ -238,8 +309,8 @@
           left: 32px
           bottom: 22px
           z-index: 200
-          &.drop-enter-active,&.drop-enter{
-            transition: all 0.4s cubic-bezier(0.49,-0.29,0.75,0.41)
+          &.drop-enter-active, &.drop-enter {
+            transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41)
           }
           .inner
             display: inline-block
@@ -248,5 +319,76 @@
             border-radius: 50%
             background: rgb(0, 160, 220)
             transition: all 0.4s linear
-
+      .shopcart-list
+        position: fixed
+        left: 0
+        bottom: 48px
+        width: 100%
+        background: #fff
+        font-size: 0
+        z-index: 12
+        .list-header
+          position: relative
+          width: 100%
+          height: 40px
+          background: #f3f5f7
+          box-sizing: border-box
+          padding: 0 18px
+          border-bottom: 1px rgba(7, 17, 27, 0.1) solid
+          .title
+            display: inline-block
+            position: absolute
+            left: 18px
+            font-size: 14px
+            font-weight: 200
+            line-height: 40px
+            color: rgb(7, 17, 27)
+          .empty
+            display: inline-block
+            position: absolute
+            right: 18px
+            font-size: 12px
+            line-height: 40px
+            color: rgb(0, 160, 220)
+        .list-content
+          max-height: 217px
+          overflow: hidden
+          padding-right: 18px
+          padding-left: 18px
+          .food
+            position: relative
+            width: 100%
+            height: 48px
+            box-sizing: border-box
+            padding: 12px 0
+            border-bottom: 1px rgba(7, 17, 27, 0.1) solid
+            .name
+              display: inline-block
+              font-size: 14px
+              line-height: 24px
+              color: rgb(7, 17, 27)
+            .price
+              position: absolute
+              right: 90px
+              bottom: 12px
+              font-size: 14px
+              line-height: 24px
+              font-weight: 700
+              color: rgb(240, 20, 20)
+              margin-left: 18px
+              padding: 0 12px
+            .cartControl_wrapper
+              position: absolute
+              right: 0
+              top: 6px
+      .list-mask
+        position: fixed
+        top: -20%
+        left: -20%
+        width: 200%
+        height: 200%
+        z-index: 5
+        background: rgba(7, 17, 27, 0.6)
+        filter: blur(10px)
+        backdrop-filter: blur(10px)
 </style>

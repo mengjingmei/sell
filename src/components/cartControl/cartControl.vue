@@ -45,7 +45,7 @@
       line-height: 24px
       color: rgb(0, 160, 220)
       display: inline-block
-      padding: 6px 6px 0 6px
+      padding: 6px 6px 6px 6px
     .cart-count
       font-size: 10px
       line-height: 24px
@@ -53,11 +53,11 @@
       text-align: center
       color: rgb(147, 153, 159)
       display: inline-block
-      padding: 6px 6px 0 6px
+      padding: 6px 6px 6px 6px
     .cart-add
       font-size: 24px
       line-height: 24px
       color: rgb(0, 160, 220)
       display: inline-block
-      padding: 6px 6px 0 6px
+      padding: 6px
 </style>
