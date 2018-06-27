@@ -4,7 +4,7 @@
     <div class="menu-wrapper" ref="menuWrapper">
       <ul v-show="goods">
         <li :class="{current: currentIndex === index}" class="menu-item" v-for="(item, index) in goods" :key="index" @click="selectMenu(index, $event)">
-          <span class="text border-1px"><icon v-show="item.type>0" :iconSize="3" :iconType="item.type"></icon>{{item.name}}</span>
+          <span class="text border-1px"><v-icon v-show="item.type>0" :iconSize="3" :iconType="item.type"></v-icon>{{item.name}}</span>
         </li>
       </ul>
     </div>
@@ -14,7 +14,7 @@
           <h1 class="title">{{item.name}}</h1>
           <ul>
             <li v-for="food in item.foods" class="food-item" :key="food.index">
-              <div class="icon">
+              <div class="icon" @click="selectFood(food, $event)">
                 <img :src="food.icon" width="57px" height="57px">
               </div>
               <div class="content">
@@ -26,14 +26,15 @@
                 <div class="price">
                   <span class="now">￥{{food.price}}</span><s class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</s>
                 </div>
-                <cartControl class="cartControl-wrapper" :food="food" @cart-add="_drop"></cartControl>
+                <v-cartControl class="cartControl-wrapper" :food="food" @cart-add="_drop"></v-cartControl>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcart ref="shopcart" :select-foods="selectFoods" :minPrice="seller.minPrice" :deliveryPrice="seller.deliveryPrice"></shopcart>
+    <v-shopcart ref="shopcart" :select-foods="selectFoods" :minPrice="seller.minPrice" :deliveryPrice="seller.deliveryPrice"></v-shopcart>
+    <v-food :food="selectedFood" ref="vfood"></v-food>
   </div>
 </template>
 
@@ -42,6 +43,7 @@
   import BScroll from 'better-scroll';
   import shopcart from '../../components/shopcart/shopcart.vue';
   import cartControl from '../../components/cartControl/cartControl.vue';
+  import food from '../../components/food/food.vue';
 
   const ERR_OK = 0;
   export default {
@@ -57,7 +59,9 @@
         // 各个食物分类信息距离视口的高度
         listHeight: [],
         // 页面滚动实时高度
-        scrollY: 0
+        scrollY: 0,
+        // 点击的商品
+        selectedFood: {}
       };
     },
     created() {
@@ -86,6 +90,7 @@
         }
         return 0;
       },
+      // 加入购物车的商品
       selectFoods() {
         let foods = [];
         this.goods.forEach((good) => {
@@ -99,9 +104,10 @@
       }
     },
     components: {
-      'icon': icon,
-      'shopcart': shopcart,
-      'cartControl': cartControl
+      'v-icon': icon,
+      'v-shopcart': shopcart,
+      'v-cartControl': cartControl,
+      'v-food': food
     },
     methods: {
       // 初始化滚动页面
@@ -130,13 +136,21 @@
         let ele = foodList[index];
         this.foodScroll.scrollToElement(ele, 300);
       },
+      // 点击商品查看商品详情
+      selectFood(food, event) {
+        if (!event._constructed) {
+          return;
+        }
+        this.selectedFood = food;
+        // 调用子组件v-food中的show方法
+        this.$refs.vfood.show();
+      },
       _drop(target) {
         this.$refs.shopcart.drop(target);
       }
     },
     events: {
       'cart-add'(target) {
-        console.log('good');
         this._drop(target);
       }
     }
@@ -145,6 +159,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
+  @import "../../common/stylus/base.styl"
   .goods
     position: absolute
     top: 174px
@@ -167,7 +182,7 @@
         &.current
           position: relative
           margin-top: -1px
-          z-index: 10
+          z-index: current-zindex //10
           background: #fff
           font-weight: 700
           .text

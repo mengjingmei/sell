@@ -34,13 +34,14 @@
                 <span>￥{{food.price*food.count}}</span>
               </div>
               <div class="cartControl_wrapper">
-                <cartControl :food="food"></cartControl>
+                <v-cartControl :food="food"></v-cartControl>
               </div>
             </li>
           </ul>
         </div>
       </div>
       <div class="list-mask" v-show="listShow()" @click="hideShow"></div>
+
     </div>
   </div>
 </template>
@@ -201,17 +202,18 @@
       }
     },
     components: {
-      'cartControl': cartControl
+      'v-cartControl': cartControl
     }
   };
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/base.styl"
   .shopcart
     position: fixed
     bottom: 0
     left: 0
-    z-index: 50
+    z-index: shopcart-zindex //50
     height: 48px
     width: 100%
     .content
@@ -219,7 +221,7 @@
       .content-left
         flex: 1
         background: #141d27
-        z-index: 20
+        z-index: content-left-zindex //20
         .logo-wrapper
           display: inline-block
           font-size: 0
@@ -240,7 +242,7 @@
             border-radius: 50%
             box-sizing: border-box
             vertical-align: top
-            z-index: 60
+            z-index: logo-zindex //60
             background: rgba(43, 52, 60, 0.8)
             text-align: center
             &.hightLight
@@ -290,7 +292,7 @@
       .content-right
         flex: 0 0 105px
         width: 105px
-        z-index: 20
+        z-index: content-right-zindex //20
         .pay
           height: 48px
           line-height: 48px
@@ -308,7 +310,7 @@
           position: fixed
           left: 32px
           bottom: 22px
-          z-index: 200
+          z-index: ball-zindex //200
           &.drop-enter-active, &.drop-enter {
             transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41)
           }
@@ -326,7 +328,7 @@
         width: 100%
         background: #fff
         font-size: 0
-        z-index: 12
+        z-index: shopcart-list-zindex //12
         .list-header
           position: relative
           width: 100%
@@ -387,7 +389,7 @@
         left: -20%
         width: 200%
         height: 200%
-        z-index: 5
+        z-index: list-mask-zindex //5
         background: rgba(7, 17, 27, 0.6)
         filter: blur(10px)
         backdrop-filter: blur(10px)

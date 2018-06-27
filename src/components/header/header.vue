@@ -16,7 +16,7 @@
         </div>
         <div class="supports" v-if="seller.supports">
           <!--根据不同优惠活动显示不同图标和优惠信息-->
-          <icon :iconSize="1" :iconType="seller.supports[0].type"></icon>
+          <v-icon :iconSize="1" :iconType="seller.supports[0].type"></v-icon>
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
         <div v-if="seller.supports" class="support-count" @click="showDetail">
@@ -42,7 +42,7 @@
           <div class="detail-main">
             <h1 class="name">{{seller.name}}</h1>
             <div class="star-wrapper">
-              <star :size="48" :score="seller.score"></star>
+              <v-star :size="48" :score="seller.score"></v-star>
             </div>
             <div class="supports">
               <div class="title">
@@ -53,7 +53,7 @@
               <div class="content">
                 <ul v-if="seller.supports">
                   <li class="supports-item" v-for="item in seller.supports" :key="item.index">
-                    <icon :iconSize="2" :iconType="item.type"></icon>
+                    <v-icon :iconSize="2" :iconType="item.type"></v-icon>
                     <span class="text">{{item.description}}</span>
                   </li>
                 </ul>
@@ -105,14 +105,15 @@
     // 注册组件
     components: {
       // 也可以直接写star
-      'star': star,
-      'icon': icon
+      'v-star': star,
+      'v-icon': icon
     }
   };
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
+  @import "../../common/stylus/base.styl"
   .header
     overflow: hidden
     position: relative
@@ -216,7 +217,7 @@
       top: 0px
       width: 100%
       height: 100%
-      z-index: -1
+      z-index:  background-zindex //-1
       filter: blur(20px)
     .detail
       position: fixed
@@ -224,7 +225,7 @@
       left: 0
       width: 100%
       height: 100%
-      z-index: 100
+      z-index: detail-zindex //100
       overflow: auto
       fiter: blur(10px)
       background: rgba(7, 17, 27, 0.8)
