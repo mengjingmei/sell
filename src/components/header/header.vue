@@ -38,7 +38,7 @@
     <!--商家详情浮动页面-->
     <transition name="fade">
       <div v-show="detailShow" class="detail" transition="fade">
-        <div class="detail-wrapper clearfix">
+        <div class="detail-wrapper clearfix" @click="closeDetail">
           <div class="detail-main">
             <h1 class="name">{{seller.name}}</h1>
             <div class="star-wrapper">
@@ -96,6 +96,7 @@
     },
     methods: {
       showDetail() {
+        console.log('show');
         this.detailShow = true;
       },
       closeDetail() {
