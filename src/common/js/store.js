@@ -1,10 +1,6 @@
 export function saveToLocal(id, key, value) {
   let store = window.localStorage._store_; // 新定义一个key值_store_，存放要保存的数据对象
-  // _store_ {
-  //   store[id]: {
-  //     key: value
-  //   }
-  // }
+
   if (!store) {
     store = {};
     store[id] = {};
@@ -24,7 +20,6 @@ export function loadFromLocal(id, key, defaults) {
     return defaults;
   }
   store = JSON.parse(store)[id]; // 将json格式-->String格式
-  // console.log(store); // {"isFavorite":true}
   if (!store) {
     return defaults;
   }

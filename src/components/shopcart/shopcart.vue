@@ -201,6 +201,11 @@
         alert('请支付' + this.totalPrice + this.deliveryPrice + '元');
       }
     },
+    created() {
+      // 获取按钮组件的点击的元素，用在drop方法里
+      this.$root.eventHub.$on('cart-add', this.drop);
+      this.$root.eventHub.$on('add-first', this.drop);
+    },
     components: {
       'v-cartControl': cartControl
     }

@@ -26,7 +26,7 @@
                 <div class="price">
                   <span class="now">￥{{food.price}}</span><s class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</s>
                 </div>
-                <v-cartControl class="cartControl-wrapper" :food="food" @cart-add="_drop"></v-cartControl>
+                <v-cartControl class="cartControl-wrapper" :food="food"></v-cartControl>
               </div>
             </li>
           </ul>
@@ -144,14 +144,6 @@
         this.selectedFood = food;
         // 调用子组件v-food中的show方法
         this.$refs.vfood.show();
-      },
-      _drop(target) {
-        this.$refs.shopcart.drop(target);
-      }
-    },
-    events: {
-      'cart-add'(target) {
-        this._drop(target);
       }
     }
   };

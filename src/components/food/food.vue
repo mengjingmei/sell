@@ -112,7 +112,8 @@
           return;
         }
         Vue.set(this.food, 'count', 1);
-        this.$emit('cart-add', event.target); // 传输点击的目标元素
+        console.log('event2');
+        this.$root.eventHub.$emit('add-first', event.target); // 通过add-first事件传输点击的目标元素
       },
       isContent(onlyContent) { // 获取子组件点击事件传递过来的数据
         this.onlyContent = onlyContent;
